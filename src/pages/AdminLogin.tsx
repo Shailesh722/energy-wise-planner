@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ShieldCheck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { loginAdmin } from "@/lib/store";
+import { loginAdmin, resetAdminCredentials } from "@/lib/store";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -14,6 +14,13 @@ const AdminLogin = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const handleReset = () => {
+    resetAdminCredentials();
+    setUsername("admin");
+    setPassword("admin123");
+    toast({ title: "Admin credentials reset", description: "Username: admin / Password: admin123" });
+  };
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,6 +61,9 @@ const AdminLogin = () => {
               </div>
               <Button type="submit" className="w-full gradient-primary text-primary-foreground border-0 hover:opacity-90" disabled={loading}>
                 {loading ? "Signing in..." : "Sign in as Admin"}
+              </Button>
+              <Button type="button" variant="outline" className="w-full" onClick={handleReset}>
+                Reset Admin Credentials
               </Button>
               <p className="text-xs text-muted-foreground text-center">Default demo admin: <span className="font-medium">admin / admin123</span></p>
             </form>

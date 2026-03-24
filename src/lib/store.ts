@@ -117,10 +117,24 @@ const DEFAULT_ADMIN_CREDENTIALS: AdminCredentials = {
 };
 
 const getAdminCredentials = (): AdminCredentials => {
+  // Check if credentials need auto-reset (every 30 days)
+  const lastReset = getItem<string | null>('sep_admin_reset_at', null);
+  if (lastReset) {
+    const daysSinceReset = (Date.now() - new Date(lastReset).getTime()) / (1000 * 60 * 60 * 24);
+    if (daysSinceReset >= 30) {
+      resetAdminCredentials();
+      return DEFAULT_ADMIN_CREDENTIALS;
+    }
+  }
   const creds = getItem<AdminCredentials | null>('sep_admin_credentials', null);
   if (creds?.username && creds?.password) return creds;
-  setItem('sep_admin_credentials', DEFAULT_ADMIN_CREDENTIALS);
+  resetAdminCredentials();
   return DEFAULT_ADMIN_CREDENTIALS;
+};
+
+export const resetAdminCredentials = () => {
+  setItem('sep_admin_credentials', DEFAULT_ADMIN_CREDENTIALS);
+  setItem('sep_admin_reset_at', new Date().toISOString());
 };
 
 export const loginAdmin = (username: string, password: string): { success: boolean; message: string } => {
