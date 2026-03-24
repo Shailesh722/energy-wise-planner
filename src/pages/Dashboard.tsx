@@ -2,24 +2,37 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DashboardLayout from "@/components/DashboardLayout";
-import { getCurrentUser, getUsageRecords, getTotalUsage, getAlerts, isOTPVerified } from "@/lib/store";
+import { getAlerts, getAvailableMonths, getCurrentMonth, getCurrentUser, getTotalUsage, getUsageRecords, isOTPVerified } from "@/lib/store";
 import { Zap, IndianRupee, TrendingUp, AlertTriangle } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const user = getCurrentUser();
-  const [records, setRecords] = useState(getUsageRecords(user?.id || ""));
-  const [totals, setTotals] = useState(getTotalUsage(user?.id || ""));
+  const [selectedMonth, setSelectedMonth] = useState(getCurrentMonth());
+  const [availableMonths, setAvailableMonths] = useState<string[]>([getCurrentMonth()]);
+  const [records, setRecords] = useState(getUsageRecords(user?.id || "", getCurrentMonth()));
+  const [totals, setTotals] = useState(getTotalUsage(user?.id || "", getCurrentMonth()));
   const [alerts, setAlerts] = useState<string[]>([]);
 
   useEffect(() => {
     if (!user) { navigate("/login"); return; }
     if (!isOTPVerified()) { navigate("/otp"); return; }
-    setRecords(getUsageRecords(user.id));
-    setTotals(getTotalUsage(user.id));
-    setAlerts(getAlerts(user.id));
+    const months = getAvailableMonths(user.id);
+    setAvailableMonths(months);
+    if (!months.includes(selectedMonth)) {
+      setSelectedMonth(months[0]);
+    }
   }, []);
+
+  useEffect(() => {
+    if (!user) return;
+    setRecords(getUsageRecords(user.id, selectedMonth));
+    setTotals(getTotalUsage(user.id, selectedMonth));
+    setAlerts(getAlerts(user.id, selectedMonth));
+  }, [selectedMonth, user]);
+
+  const formatMonth = (month: string) => new Date(`${month}-01`).toLocaleDateString("en-IN", { month: "long", year: "numeric" });
 
   const chartData = [...records].reverse().slice(-14).map(r => ({
     date: new Date(r.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }),
@@ -37,9 +50,24 @@ const Dashboard = () => {
   return (
     <DashboardLayout>
       <div className="space-y-6 animate-fade-in">
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">Welcome, {user?.name}!</h1>
-          <p className="text-muted-foreground text-sm">Here's your electricity usage overview</p>
+        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">Welcome, {user?.name}!</h1>
+            <p className="text-muted-foreground text-sm">Overview for {formatMonth(selectedMonth)}</p>
+          </div>
+          <div className="space-y-1">
+            <label htmlFor="month-select" className="text-xs font-medium text-muted-foreground">Select Month (History)</label>
+            <select
+              id="month-select"
+              value={selectedMonth}
+              onChange={e => setSelectedMonth(e.target.value)}
+              className="h-10 rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            >
+              {availableMonths.map(month => (
+                <option key={month} value={month}>{formatMonth(month)}</option>
+              ))}
+            </select>
+          </div>
         </div>
 
         {/* Alerts */}
@@ -73,7 +101,7 @@ const Dashboard = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <Card className="shadow-card border-border/50">
               <CardHeader className="pb-2">
-                <CardTitle className="text-base">Daily Usage (Units)</CardTitle>
+                <CardTitle className="text-base">Daily Usage (Units) — {formatMonth(selectedMonth)}</CardTitle>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={250}>
@@ -96,7 +124,7 @@ const Dashboard = () => {
 
             <Card className="shadow-card border-border/50">
               <CardHeader className="pb-2">
-                <CardTitle className="text-base">Daily Cost (₹)</CardTitle>
+                <CardTitle className="text-base">Daily Cost (₹) — {formatMonth(selectedMonth)}</CardTitle>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={250}>
