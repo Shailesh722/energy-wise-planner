@@ -11,6 +11,8 @@ import Dashboard from "./pages/Dashboard";
 import AddUsage from "./pages/AddUsage";
 import BudgetPlanner from "./pages/BudgetPlanner";
 import Report from "./pages/Report";
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +32,8 @@ const App = () => (
           <Route path="/add-usage" element={<AddUsage />} />
           <Route path="/budget" element={<BudgetPlanner />} />
           <Route path="/report" element={<Report />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

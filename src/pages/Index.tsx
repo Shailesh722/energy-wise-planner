@@ -49,6 +49,9 @@ const Index = () => {
             <Button size="lg" variant="outline" onClick={() => navigate("/login")} className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10">
               Sign In
             </Button>
+            <Button size="lg" variant="ghost" onClick={() => navigate("/admin/login")} className="text-primary-foreground hover:bg-primary-foreground/10">
+              Admin Login
+            </Button>
           </div>
         </div>
       </section>
