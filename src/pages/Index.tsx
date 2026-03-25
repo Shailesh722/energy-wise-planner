@@ -42,17 +42,32 @@ const Index = () => {
           <p className="text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-8">
             Track your consumption, reduce bills, get alerts, visualize data, and generate reports — all in one place.
           </p>
-          <div className="flex gap-3 justify-center flex-wrap">
-            <Button size="lg" onClick={() => navigate("/register")} className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 shadow-lg px-8">
-              Get Started <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-            <Button size="lg" variant="outline" onClick={() => navigate("/login")} className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10">
-              Sign In
-            </Button>
-            <Button size="lg" variant="ghost" onClick={() => navigate("/admin/login")} className="text-primary-foreground hover:bg-primary-foreground/10">
-              Admin Login
-            </Button>
+          <div className="flex gap-4 justify-center flex-wrap">
+            <div
+              onClick={() => navigate("/login")}
+              className="cursor-pointer bg-primary-foreground/15 hover:bg-primary-foreground/25 backdrop-blur-sm border border-primary-foreground/30 rounded-2xl p-8 text-center transition-all hover:-translate-y-1 hover:shadow-xl w-56"
+            >
+              <div className="w-16 h-16 rounded-2xl bg-primary-foreground/20 flex items-center justify-center mx-auto mb-4">
+                <Zap className="w-8 h-8 text-primary-foreground" />
+              </div>
+              <h3 className="text-xl font-bold text-primary-foreground mb-2">User Login</h3>
+              <p className="text-sm text-primary-foreground/70">Track usage, view bills & reports</p>
+            </div>
+            <div
+              onClick={() => navigate("/admin/login")}
+              className="cursor-pointer bg-primary-foreground/15 hover:bg-primary-foreground/25 backdrop-blur-sm border border-primary-foreground/30 rounded-2xl p-8 text-center transition-all hover:-translate-y-1 hover:shadow-xl w-56"
+            >
+              <div className="w-16 h-16 rounded-2xl bg-primary-foreground/20 flex items-center justify-center mx-auto mb-4">
+                <Shield className="w-8 h-8 text-primary-foreground" />
+              </div>
+              <h3 className="text-xl font-bold text-primary-foreground mb-2">Admin Login</h3>
+              <p className="text-sm text-primary-foreground/70">Manage users & monitor system</p>
+            </div>
           </div>
+          <p className="text-primary-foreground/60 text-sm mt-6">
+            New user?{" "}
+            <span onClick={() => navigate("/register")} className="underline cursor-pointer text-primary-foreground/90 hover:text-primary-foreground">Register here</span>
+          </p>
         </div>
       </section>
 
