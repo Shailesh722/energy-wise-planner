@@ -2,11 +2,12 @@ import { ReactNode, useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { getCurrentUser, logoutUser } from "@/lib/store";
-import { Zap, LayoutDashboard, PlusCircle, Wallet, FileText, LogOut, Menu, X } from "lucide-react";
+import { Zap, LayoutDashboard, PlusCircle, Wallet, FileText, Brain, LogOut, Menu, X } from "lucide-react";
 
 const navItems = [
   { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { path: "/add-usage", label: "Add Usage", icon: PlusCircle },
+  { path: "/ai-predict", label: "AI Predictions", icon: Brain },
   { path: "/budget", label: "Budget Planner", icon: Wallet },
   { path: "/report", label: "History & PDF", icon: FileText },
 ];

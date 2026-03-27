@@ -9,6 +9,7 @@ import Register from "./pages/Register";
 import OTPVerify from "./pages/OTPVerify";
 import Dashboard from "./pages/Dashboard";
 import AddUsage from "./pages/AddUsage";
+import AIPredict from "./pages/AIPredict";
 import BudgetPlanner from "./pages/BudgetPlanner";
 import Report from "./pages/Report";
 import AdminLogin from "./pages/AdminLogin";
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/otp" element={<OTPVerify />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/add-usage" element={<AddUsage />} />
+          <Route path="/ai-predict" element={<AIPredict />} />
           <Route path="/budget" element={<BudgetPlanner />} />
           <Route path="/report" element={<Report />} />
           <Route path="/admin/login" element={<AdminLogin />} />
